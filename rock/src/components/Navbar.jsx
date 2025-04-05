@@ -44,7 +44,7 @@ const Navbar = () => {
     return (
         <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="navbar-brand">
-                <h2 className="station-name">KLAQ 105.5</h2>
+                <h2 className="station-name">KLAQ 95.5 FM</h2>
             </div>
             
             <div className={`mobile-menu-toggle ${mobileMenuOpen ? 'active' : ''}`} 

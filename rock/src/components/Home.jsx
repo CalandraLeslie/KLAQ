@@ -1,59 +1,144 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-function Home() {
+const Home = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [streamError, setStreamError] = useState(false);
+  const audioRef = useRef(null);
+
+  // Stream URL - this might need to be updated if it changes
+  const streamUrl = "https://live.amperwave.net/direct/townsquare-klaqfmaac-ibc3";
+
+  const togglePlayback = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().catch(error => {
+        console.error("Audio playback failed:", error);
+        setStreamError(true);
+        // Fallback to opening in new window
+        window.open("https://klaq.com/listen-live/", "_blank", "noopener,noreferrer");
+        setIsPlaying(true);
+      });
+    }
+  };
+
+  // Handle successful play event
+  useEffect(() => {
+    const handlePlay = () => {
+      setIsPlaying(true);
+      setStreamError(false);
+    };
+    
+    const handleError = () => {
+      setStreamError(true);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+
+    const audioElement = audioRef.current;
+    if (audioElement) {
+      audioElement.addEventListener('play', handlePlay);
+      audioElement.addEventListener('error', handleError);
+    }
+
+    return () => {
+      if (audioElement) {
+        audioElement.removeEventListener('play', handlePlay);
+        audioElement.removeEventListener('error', handleError);
+      }
+    };
+  }, []);
+
   return (
     <div className="home-container" id="home">
       <div className="home-hero">
-        <div className="home-content fade-in">
-          <h1 className="home-title">
-            <span className="station-brand">KLAQ 105.5</span>
-            <span className="tagline">The hottest rock music in the desert</span>
-          </h1>
-          
-          <div className="cta-buttons">
-            <button className="play-button">
-              <span className="play-icon">▶</span> Listen Live
-            </button>
-            <button className="button" onClick={() => {
-              document.getElementById('requests').scrollIntoView({ behavior: 'smooth' });
-            }}>Request a Song</button>
-          </div>
-        </div>
-      </div>
-      
-      {/* Features Section - Now integrated into Home */}
-      <div className="features-section">
         <div className="container">
-          <h2 className="section-title">Station Features</h2>
-          <div className="features-grid">
-            <div className="feature-card">
-              <div className="feature-icon">🎵</div>
-              <h3>24/7 Rock Music</h3>
-              <p>Enjoy non-stop rock hits from classic to contemporary, carefully curated by our expert DJs.</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">🎙️</div>
-              <h3>Live Shows</h3>
-              <p>Tune in for exclusive interviews with rock legends and emerging artists in the rock scene.</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">🎸</div>
-              <h3>Local Bands</h3>
-              <p>We support local talent with dedicated airtime and spotlights on homegrown rock bands.</p>
-            </div>
-            
-            <div className="feature-card">
-              <div className="feature-icon">🎮</div>
-              <h3>Interactive App</h3>
-              <p>Download our app to request songs, participate in contests, and enjoy exclusive content.</p>
-            </div>
+          <div className="home-title">
+            <h1 className="station-brand">KLAQ 95.5 FM</h1>
+            <p className="tagline">The Desert's Rock Station</p>
+          </div>
+          
+          {/* Cactus image */}
+          <div className="cactus-container">
+            <img 
+              src="/cactus.jpg" 
+              alt="Desert Cactus" 
+              className="cactus-gif"
+              width="400"  // Doubled the width
+            />
+          </div>
+          
+          <div className="home-cta">
+            <button 
+              className={`listen-btn ${isPlaying ? 'playing' : ''}`}
+              onClick={togglePlayback}
+            >
+              {isPlaying ? 'Stop Listening' : 'Listen Live'}
+            </button>
+
+            {/* Hidden audio element */}
+            <audio 
+              ref={audioRef} 
+              src={streamUrl}
+              preload="none"
+              style={{ display: 'none' }}
+            />
+
+            {/* Visual indication of playing */}
+            {isPlaying && (
+              <div className="audio-player-container">
+                <div className="now-playing">
+                  <div className="equalizer">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                  <p>
+                    {streamError 
+                      ? "95.5 FM Live Stream is playing in a new window" 
+                      : "Now Playing: 95.5 FM Live"}
+                  </p>
+                </div>
+
+                {!streamError && (
+                  <div className="player-controls">
+                    <input 
+                      type="range" 
+                      min="0" 
+                      max="1" 
+                      step="0.01" 
+                      defaultValue="1"
+                      onChange={(e) => {
+                        if (audioRef.current) {
+                          audioRef.current.volume = e.target.value;
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+
+                {streamError && (
+                  <div className="player-options">
+                    <a 
+                      href="https://klaq.com/listen-live/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="external-link"
+                    >
+                      Reopen Stream
+                    </a>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Home;

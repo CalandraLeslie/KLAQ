@@ -431,6 +431,32 @@ section, .section {
   font-size: 0.7rem;
 }
 
+/* Make the Requests icon brighter in navbar */
+.navbar-links li a[href="#requests"] .nav-icon,
+.navbar-links li button[data-target="requests"] .nav-icon {
+  color: var(--acid-yellow); /* Bright yellow color */
+  text-shadow: 0 0 10px rgba(241, 196, 15, 0.7); /* Adds a glow effect */
+  opacity: 1;
+  filter: brightness(1.3); /* Makes it brighter */
+  transform: scale(1.1); /* Slightly larger */
+}
+
+/* Hover effect for even more brightness */
+.navbar-links li a[href="#requests"]:hover .nav-icon,
+.navbar-links li button[data-target="requests"]:hover .nav-icon {
+  color: var(--highlight-white);
+  text-shadow: 0 0 15px var(--acid-yellow);
+  filter: brightness(1.5);
+}
+
+/* Active state for the requests nav item */
+.navbar-links li.active a[href="#requests"] .nav-icon,
+.navbar-links li.active button[data-target="requests"] .nav-icon {
+  color: var(--highlight-white);
+  text-shadow: 0 0 20px var(--acid-yellow);
+  filter: brightness(1.8);
+}
+
 /* Fix top padding for main content to account for fixed navbar */
 .home-container {
   margin-top: -70px; /* Adjust to match the padding-top of body */
@@ -520,11 +546,169 @@ section, .section {
 }
 
 /* Ensure sections have proper spacing and IDs */
-#prizes, #concerts, #requests {
+#prizes, #concerts {
   scroll-margin-top: 80px; /* This helps with scroll positioning under fixed navbar */
   min-height: 100vh;
   padding-top: 2rem;
 }
+
+#requests {
+  min-height: 60vh; /* Reduced from 100vh */
+  padding: 1rem;    /* Reduced padding */
+  scroll-margin-top: 80px;
+}
+
+/* Add these styles to make the form more compact */
+.request-form {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.request-form input,
+.request-form textarea {
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.request-form button {
+  padding: 10px 20px;
+}
+
+/* Adjust container padding for a more compact look */
+.requests-container .container {
+  padding: 1rem;
+}
+
+/* Cactus Animation Styles */
+.cactus-container {
+  margin: 2rem 0;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  overflow: hidden;
+  max-height: 600px;
+}
+
+.cactus-svg {
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+}
+
+.cactus-body {
+  animation: sway 5s ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+.cactus-arm {
+  animation: arm-sway 4s ease-in-out infinite alternate;
+  transform-origin: right center;
+}
+
+.left-arm {
+  transform-origin: left center;
+  animation-delay: 1s;
+}
+
+.right-arm {
+  animation-delay: 2s;
+}
+
+.cactus-flower {
+  animation: flower-pulse 3s ease infinite alternate;
+}
+
+.cactus-spikes {
+  animation: spike-glow 5s ease-in-out infinite alternate;
+}
+
+.cactus-gif {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0% {
+    transform: rotate(-2deg);
+  }
+  100% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes arm-sway {
+  0% {
+    transform: rotate(-5deg) scale(1);
+  }
+  100% {
+    transform: rotate(5deg) scale(1.05);
+  }
+}
+
+@keyframes flower-pulse {
+  0% {
+    transform: scale(1);
+    fill: #e74c3c;
+  }
+  50% {
+    transform: scale(1.2);
+    fill: #ff7675;
+  }
+  100% {
+    transform: scale(1);
+    fill: #e74c3c;
+  }
+}
+
+@keyframes spike-glow {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Remove the height restriction at smaller screens */
+@media (max-width: 768px) {
+  .cactus-container {
+    max-height: 400px;
+  }
+}
+
+/* Make cactus responsive */
+@media (max-width: 768px) {
+  .cactus-container {
+    width: 300px;  /* Increased from 150px */
+    height: 380px; /* Increased from 188px */
+  }
+}
+
+.cactus-gif {
+  max-width: 100%;
+  height: auto;
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+
 
 /* Media Queries */
 @media (max-width: 768px) {
