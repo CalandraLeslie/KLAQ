@@ -1,33 +1,50 @@
 import React from 'react';
 
 const Features = () => {
-    return (
-        <div style={{ backgroundColor: 'rgb(40, 44, 52)', color: 'rgb(236, 240, 241)', padding: '20px' }}>
-            <h1 style={{ color: 'rgb(155, 89, 182)' }}>Features of Our Radio Station</h1>
-            <ul>
-                <li style={{ margin: '10px 0' }}>
-                    <h2 style={{ color: 'rgb(241, 196, 15)' }}>Live Streaming</h2>
-                    <p>Enjoy uninterrupted live streaming of your favorite rock music 24/7.</p>
-                </li>
-                <li style={{ margin: '10px 0' }}>
-                    <h2 style={{ color: 'rgb(52, 152, 219)' }}>Request Your Favorite Songs</h2>
-                    <p>Submit your song requests and hear them played live on air!</p>
-                </li>
-                <li style={{ margin: '10px 0' }}>
-                    <h2 style={{ color: 'rgb(211, 84, 0)' }}>Win Exciting Prizes</h2>
-                    <p>Participate in our contests and stand a chance to win amazing prizes!</p>
-                </li>
-                <li style={{ margin: '10px 0' }}>
-                    <h2 style={{ color: 'rgb(192, 57, 43)' }}>Latest Concert Information</h2>
-                    <p>Stay updated with the latest concert dates and locations for your favorite bands.</p>
-                </li>
-                <li style={{ margin: '10px 0' }}>
-                    <h2 style={{ color: 'rgb(46, 204, 113)' }}>User-Friendly Navigation</h2>
-                    <p>Navigate easily through our website with a clean and intuitive interface.</p>
-                </li>
-            </ul>
+  return (
+    <div className="features-container" id="features">
+      <div className="container">
+        <h1 className="fade-in">Station Features</h1>
+        
+        <div className="features-grid">
+          <div className="feature-card">
+            <div className="feature-icon">🎸</div>
+            <h3>24/7 Rock</h3>
+            <p>Non-stop rock music from classic to modern, keeping the energy high all day and night.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">🎟️</div>
+            <p>Get exclusive tickets to the hottest concerts before they go on sale to the general public.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">🎤</div>
+            <h3>Artist Interviews</h3>
+            <p>Hear from your favorite musicians with our exclusive backstage interviews and studio sessions.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">📱</div>
+            <h3>Mobile App</h3>
+            <p>Take us anywhere with our dedicated mobile app. Available for iOS and Android devices.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">🎵</div>
+            <h3>Song Requests</h3>
+            <p>Influence our playlist by requesting your favorite rock tracks through our website or app.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="feature-icon">🎁</div>
+            <h3>Giveaways</h3>
+            <p>Win amazing prizes including concert tickets, band merchandise, and meet & greets.</p>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Features;

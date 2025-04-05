@@ -10,7 +10,7 @@ const Navbar = () => {
             setScrolled(window.scrollY > 50);
             
             // Determine which section is currently in view
-            const sections = ['home', 'prizes', 'concerts', 'requests'];
+            const sections = ['home', 'features', 'prizes', 'concerts', 'requests'];
             for (const id of sections) {
                 const section = document.getElementById(id);
                 if (section) {
@@ -34,10 +34,7 @@ const Navbar = () => {
                 top: section.offsetTop - 80,
                 behavior: 'smooth'
             });
-            setActiveSection(id);
             setMobileMenuOpen(false);
-        } else {
-            console.error(`Section with id "${id}" not found`);
         }
     };
 
@@ -46,19 +43,17 @@ const Navbar = () => {
             <div className="navbar-brand">
                 <h2 className="station-name">KLAQ 95.5 FM</h2>
             </div>
-            
-            <div className={`mobile-menu-toggle ${mobileMenuOpen ? 'active' : ''}`} 
-                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            
             <ul className={`navbar-links ${mobileMenuOpen ? 'active' : ''}`}>
                 <li className={activeSection === 'home' ? 'active' : ''}>
                     <button onClick={() => scrollToSection('home')}>
                         <span className="nav-icon">🏠</span>
                         <span className="nav-text">Home</span>
+                    </button>
+                </li>
+                <li className={activeSection === 'features' ? 'active' : ''}>
+                    <button onClick={() => scrollToSection('features')}>
+                        <span className="nav-icon">⭐</span>
+                        <span className="nav-text">Features</span>
                     </button>
                 </li>
                 <li className={activeSection === 'prizes' ? 'active' : ''}>
@@ -69,17 +64,24 @@ const Navbar = () => {
                 </li>
                 <li className={activeSection === 'concerts' ? 'active' : ''}>
                     <button onClick={() => scrollToSection('concerts')}>
-                        <span className="nav-icon">🎸</span>
+                        <span className="nav-icon">🎵</span>
                         <span className="nav-text">Concerts</span>
                     </button>
                 </li>
                 <li className={activeSection === 'requests' ? 'active' : ''}>
-                    <button onClick={() => scrollToSection('requests')}>
-                        <span className="nav-icon">🎵</span>
+                    <button onClick={() => scrollToSection('requests')} data-target="requests">
+                        <span className="nav-icon">🎤</span>
                         <span className="nav-text">Requests</span>
                     </button>
                 </li>
             </ul>
+            <button 
+                className="mobile-menu-toggle"
+                aria-label="Toggle menu"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+                <span className="nav-icon">{mobileMenuOpen ? '✕' : '☰'}</span>
+            </button>
         </nav>
     );
 };
