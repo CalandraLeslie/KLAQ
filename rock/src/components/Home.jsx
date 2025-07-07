@@ -1,65 +1,45 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 /**
- * Home component - Hero section with live radio streaming
- * 
- * This component provides:
- * - Station branding and tagline
- * - Live audio streaming functionality
- * - Visual feedback for audio playback state
- * - Volume controls and fallback options
- * - Desert-themed imagery (cactus)
- * 
- * Features graceful fallback to external streaming page if direct audio fails
- * 
- * @returns {JSX.Element} Hero section with live streaming capabilities
+ * Modern Home Hero Component - KLAQ 95.5 FM
+ * Professional rock radio station landing page with live streaming
  */
 const Home = () => {
-  // State to track if audio is currently playing
   const [isPlaying, setIsPlaying] = useState(false);
-  
-  // State to track if there's an error with the audio stream
   const [streamError, setStreamError] = useState(false);
-  
-  // Reference to the hidden audio element for controlling playback
+  const [volume, setVolume] = useState(1);
   const audioRef = useRef(null);
 
-  // Live stream URL for KLAQ 95.5 FM - update if stream URL changes
   const streamUrl = "https://live.amperwave.net/direct/townsquare-klaqfmaac-ibc3";
 
-  /**
-   * Toggles audio playback between play and pause states
-   * Handles stream errors by falling back to external player
-   */
   const togglePlayback = () => {
     if (isPlaying) {
-      // Stop playback
       audioRef.current.pause();
       setIsPlaying(false);
     } else {
-      // Start playback with error handling
       audioRef.current.play().catch(error => {
         console.error("Audio playback failed:", error);
         setStreamError(true);
-        // Fallback: Open external stream in new window if direct playback fails
         window.open("https://klaq.com/listen-live/", "_blank", "noopener,noreferrer");
         setIsPlaying(true);
       });
     }
   };
 
-  /**
-   * Effect hook to handle audio element events
-   * Sets up event listeners for successful playback and errors
-   */
+  const handleVolumeChange = (e) => {
+    const newVolume = e.target.value;
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+  };
+
   useEffect(() => {
-    // Handler for successful audio play event
     const handlePlay = () => {
       setIsPlaying(true);
       setStreamError(false);
     };
     
-    // Handler for audio errors
     const handleError = () => {
       setStreamError(true);
       if (audioRef.current) {
@@ -69,12 +49,10 @@ const Home = () => {
 
     const audioElement = audioRef.current;
     if (audioElement) {
-      // Attach event listeners
       audioElement.addEventListener('play', handlePlay);
       audioElement.addEventListener('error', handleError);
     }
 
-    // Cleanup function to remove event listeners
     return () => {
       if (audioElement) {
         audioElement.removeEventListener('play', handlePlay);
@@ -84,99 +62,118 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home-container" id="home">
-      <div className="home-hero">
+    <section className="hero-section" id="home">
+      {/* Background Video/Image */}
+      <div className="hero-background">
+        <img 
+          src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
+          alt="Rock Concert Stage"
+          className="hero-bg-image"
+        />
+        <div className="hero-overlay"></div>
+      </div>
+
+      <div className="hero-content">
         <div className="container">
-          {/* Station branding section */}
-          <div className="home-title">
-            <h1 className="station-brand">KLAQ 95.5 FM</h1>
-            <p className="tagline">The Desert's Rock Station</p>
-          </div>
-          
-          {/* Desert-themed decorative image */}
-          <div className="cactus-container">
-            <img 
-              src="/cactus.jpg" 
-              alt="Desert Cactus" 
-              className="cactus-gif"
-              width="400"  // Doubled the width for better visual impact
-            />
-          </div>
-          
-          {/* Live streaming controls section */}
-          <div className="home-cta">
-            {/* Main play/stop button */}
-            <button 
-              className={`listen-btn ${isPlaying ? 'playing' : ''}`}
-              onClick={togglePlayback}
-            >
-              {isPlaying ? 'Stop Listening' : 'Listen Live'}
-            </button>
+          <div className="hero-main">
+            {/* Station Branding */}
+            <div className="brand-section fade-in-up">
+              <h1 className="station-logo">KLAQ 95.5</h1>
+              <p className="station-tagline">The Desert's Premier Rock Station</p>
+              <div className="brand-accent"></div>
+            </div>
 
-            {/* Hidden audio element for streaming - not visible to user */}
-            <audio 
-              ref={audioRef} 
-              src={streamUrl}
-              preload="none" // Don't preload to save bandwidth
-              style={{ display: 'none' }}
-            />
+            {/* Live Stream Controls */}
+            <div className="stream-section fade-in-up">
+              <div className="stream-controls">
+                <button 
+                  className={`play-button ${isPlaying ? 'playing' : ''}`}
+                  onClick={togglePlayback}
+                >
+                  <span className="play-icon">
+                    {isPlaying ? '⏹' : '▶'}
+                  </span>
+                  <span className="play-text">
+                    {isPlaying ? 'Stop Live Stream' : 'Listen Live Now'}
+                  </span>
+                </button>
 
-            {/* Audio player UI - only shown when playing */}
-            {isPlaying && (
-              <div className="audio-player-container">
-                {/* Now playing indicator with animated equalizer */}
-                <div className="now-playing">
-                  <div className="equalizer">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                  <p>
-                    {streamError 
-                      ? "95.5 FM Live Stream is playing in a new window" 
-                      : "Now Playing: 95.5 FM Live"}
-                  </p>
-                </div>
+                {/* Hidden Audio Element */}
+                <audio 
+                  ref={audioRef} 
+                  src={streamUrl}
+                  preload="none"
+                  style={{ display: 'none' }}
+                />
 
-                {/* Volume control - only shown for direct audio playback */}
-                {!streamError && (
-                  <div className="player-controls">
-                    <input 
-                      type="range" 
-                      min="0" 
-                      max="1" 
-                      step="0.01" 
-                      defaultValue="1"
-                      onChange={(e) => {
-                        // Update audio volume when slider changes
-                        if (audioRef.current) {
-                          audioRef.current.volume = e.target.value;
-                        }
-                      }}
-                    />
-                  </div>
-                )}
+                {/* Player Interface */}
+                {isPlaying && (
+                  <div className="player-interface slide-in-right">
+                    <div className="now-playing-info">
+                      <div className="equalizer-bars">
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                        <div className="bar"></div>
+                      </div>
+                      <div className="stream-info">
+                        <p className="stream-status">
+                          {streamError ? "Streaming in external player" : "Live on KLAQ 95.5 FM"}
+                        </p>
+                        <p className="stream-quality">High Quality • Stereo</p>
+                      </div>
+                    </div>
 
-                {/* Fallback options when using external player */}
-                {streamError && (
-                  <div className="player-options">
-                    <a 
-                      href="https://klaq.com/listen-live/" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="external-link"
-                    >
-                      Reopen Stream
-                    </a>
+                    {!streamError && (
+                      <div className="volume-control">
+                        <span className="volume-icon">🔊</span>
+                        <input 
+                          type="range" 
+                          min="0" 
+                          max="1" 
+                          step="0.01" 
+                          value={volume}
+                          onChange={handleVolumeChange}
+                          className="volume-slider"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
-            )}
+            </div>
+
+            {/* Featured Content */}
+            <div className="hero-features fade-in-up">
+              <div className="feature-grid">
+                <div className="feature-item">
+                  <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Rock Music" />
+                  <h3>Classic Rock</h3>
+                  <p>The greatest rock hits of all time</p>
+                </div>
+                <div className="feature-item">
+                  <img src="https://images.unsplash.com/photo-1471478331149-c72f17e33c73?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Live Shows" />
+                  <h3>Live Shows</h3>
+                  <p>Interactive DJ shows & talk radio</p>
+                </div>
+                <div className="feature-item">
+                  <img src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Local Events" />
+                  <h3>Desert Events</h3>
+                  <p>Your local concert & event guide</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Scroll Indicator */}
+      <div className="scroll-indicator">
+        <div className="scroll-arrow"></div>
+        <p>Discover More</p>
+      </div>
+    </section>
   );
 };
 
